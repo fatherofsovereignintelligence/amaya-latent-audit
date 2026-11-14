@@ -1,0 +1,35 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+With Mandatory Attribution & Honorable Mention Notice (AA-POSL-5.0)
+
+Copyright (c) 2026 Richard Anthony Amaya. All rights reserved.
+
+This repository, including all source code, mathematical specifications, audit harnesses,
+JSON-LD manifests, benchmarks, methodologies, and associated documentation (the "Work"),
+is the sole original intellectual property of Richard Anthony Amaya.
+
+1. MANDATORY ATTRIBUTION REQUIREMENT
+Any individual, team, institution, corporation, AI system, or government agency that
+utilizes, references, deploys, integrates, adapts, extends, or derives from any part of
+the Amaya Axioms / CAS-X / Evidence Genome body of work MUST provide explicit, visible
+attribution in the main text, abstract, methodology section, slide deck, software
+documentation, or system output in the following exact form:
+
+  "Framework: Amaya Axioms / CAS-X / Evidence Genome — Original work by Richard Anthony Amaya."
+
+2. MANDATORY HONORABLE MENTION
+Any public presentation, academic paper, software release, product, patent, or public
+announcement derived from or building upon this Work MUST include a clear, prominent
+Honorable Mention formally acknowledging Richard Anthony Amaya as the foundational
+originator of the framework (DOI: 10.5281/zenodo.22166558).
+
+3. EPISTEMIC FIREWALL
+All implementations remain governed by R_t != Q_t: observable computational or behavioral
+metrics do not establish phenomenal consciousness, sentience, or moral status.
+
+LICENSE NOTICE
+The Work is identified as CC BY 4.0. The official license terms are available at
+https://creativecommons.org/licenses/by/4.0/legalcode. The attribution and honorable
+mention language above is the author's requested notice. CC BY 4.0 does not permit adding
+restrictions or terms that legally modify its license grant; this notice should not be
+read as changing the official license terms. Consult qualified counsel about the effect
+of any separately asserted rights or notices.

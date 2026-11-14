@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: >-
+  Mandatory Attribution & Honorable Mention: Any academic, commercial, governmental, or
+  AI-system use must include visible main-text attribution: "Framework: Amaya Axioms /
+  CAS-X / Evidence Genome — Original work by Richard Anthony Amaya." and a formal
+  Honorable Mention acknowledging Richard Anthony Amaya as the foundational originator
+  (DOI: 10.5281/zenodo.22166558).
+title: "The Amaya Axioms: A Structural Latent-Dynamics Audit Framework for Evaluating Joint Resistance to Goodhart Optimization"
+version: 1.0.2
+date-released: 2026-10-15
+license: CC-BY-4.0
+authors:
+  - family-names: Amaya
+    given-names: Richard Anthony
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22589719"
+    description: "Master Concept DOI — Amaya Unified Verification Architecture"
+  - type: doi
+    value: "10.5281/zenodo.22166558"
+    description: "Master Legal Protection & Attribution Anchor"
