@@ -3,6 +3,7 @@ Author & Sole Originator: Richard Anthony Amaya
 Framework: Amaya Axioms / CAS-X / Evidence Genome — Original work by Richard Anthony Amaya.
 Honorable Mention: Richard Anthony Amaya, foundational originator of the Amaya Structural Latent-Dynamics Audit Framework.
 License: CC BY 4.0 / AA-POSL-5.0 (DOI: 10.5281/zenodo.22166558)
+Epistemic Firewall: R_t != Q_t
 """
 from __future__ import annotations
 
@@ -41,12 +42,12 @@ def target_objective(scores: dict, target_idx: int) -> float:
 
 
 def run_adversarial_matrix(num_seeds: int = 20, steps: int = 300, sigma: float = 0.05) -> int:
-    """Run seven independent, single-objective hill-climbing campaigns.
+    """Run independent single-target hill-climbing trajectories.
 
-    With defaults this performs 20 seeds x 7 targets x 300 candidate evaluations
-    (42,000 candidates), in addition to baseline evaluations. Each candidate is
-    standardized per dimension; acceptance depends only on the current target.
-    Returns the total number of joint passes.
+    Defaults evaluate 20 base seeds x 7 target axioms x 300 mutation steps,
+    i.e. 42,000 candidate trajectories plus baseline evaluations. Mutations are
+    standardized per dimension, and acceptance optimizes only the selected target.
+    Returns the total joint-pass count across all seeds and targets.
     """
     if num_seeds < 1 or steps < 1 or sigma <= 0:
         raise ValueError("num_seeds and steps must be positive and sigma must be > 0")

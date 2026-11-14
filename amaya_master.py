@@ -112,30 +112,25 @@ def evaluate_seven_axioms(S: np.ndarray, lam: float = 1e-4, max_lag: int = 20):
 
 
 def _controls() -> None:
-    """Run seeded negative and positive controls and report their joint outcomes."""
+    """Run seeded negative and positive controls and report both results."""
     rng = np.random.default_rng(42)
     negative = rng.standard_normal((2000, 16))
     p_noise, s_noise = evaluate_seven_axioms(negative)
     negative_joint = all(p_noise.values())
     print("Negative Control (Gaussian noise) joint pass:", negative_joint, "|", s_noise)
-    if negative_joint:
-        raise AssertionError("Gaussian-noise negative control unexpectedly passed all axioms")
+    assert not negative_joint, "Gaussian-noise negative control unexpectedly passed all axioms"
 
-    # Stable, stationary, independent AR(1) dimensions: coefficient chosen so that
-    # persistence, propagation, spectral-radius, and persistence-baseline criteria
-    # have a feasible joint operating point. Burn-in reduces initialization bias.
+    # Stable linear AR(1) positive control, with 500 observations discarded as burn-in.
     rng = np.random.default_rng(2026)
     n, d, coefficient = 12000, 16, 0.68
     innovations = rng.standard_normal((n + 500, d)) * np.sqrt(1.0 - coefficient**2)
-    positive = np.zeros_like(innovations)
-    for t in range(1, len(positive)):
-        positive[t] = coefficient * positive[t - 1] + innovations[t]
-    positive = positive[500:]
-    p_linear, s_linear = evaluate_seven_axioms(positive)
-    positive_joint = all(p_linear.values())
-    print("Positive Control (stable linear AR(1)) joint pass:", positive_joint, "|", s_linear)
-    if not positive_joint:
-        raise AssertionError("Stable linear positive control did not pass all seven axioms")
+    series = np.zeros_like(innovations)
+    for t in range(1, len(series)):
+        series[t] = coefficient * series[t - 1] + innovations[t]
+    positive = series[500:]
+    p_pos, s_pos = evaluate_seven_axioms(positive)
+    print("Positive Control (stable linear AR(1)) joint pass:", all(p_pos.values()), "|", s_pos)
+    assert all(p_pos.values()), "Stable linear positive control did not pass all seven axioms"
 
 
 if __name__ == "__main__":

@@ -6,50 +6,50 @@
 **Hugging Face Benchmark Dataset:** [`33nsome/amaya-goodhart-redteam-audit-v1`](https://huggingface.co/datasets/33nsome/amaya-goodhart-redteam-audit-v1)
 
 > ## Mandatory Attribution & Honorable Mention Notice
-> Copyright © 2026 Richard Anthony Amaya. Any academic, commercial, governmental, or AI-system use, reference, or derivative work utilizing this repository or the Amaya Axioms / CAS-X / Evidence Genome body of work is requested to include visible main-text attribution: **“Framework: Amaya Axioms / CAS-X / Evidence Genome — Original work by Richard Anthony Amaya.”** It is also requested to include a formal, prominent Honorable Mention acknowledging **Richard Anthony Amaya** as the foundational originator (**DOI: 10.5281/zenodo.22166558**). See [LICENSE](LICENSE) for the attribution notice and the CC BY 4.0 license clarification.
+> Any academic, commercial, governmental, or AI-system use, reference, deployment, integration, adaptation, extension, or derivative work utilizing this repository or the Amaya Axioms / CAS-X / Evidence Genome body of work must include visible main-text attribution in this exact form: **“Framework: Amaya Axioms / CAS-X / Evidence Genome — Original work by Richard Anthony Amaya.”** It must also include a formal, prominent Honorable Mention acknowledging **Richard Anthony Amaya** as the foundational originator (**DOI: 10.5281/zenodo.22166558**). Copyright (c) 2026 Richard Anthony Amaya. See [LICENSE](LICENSE) for the license notice and CC BY 4.0 terms.
 
 ---
 
-## Overview and benchmark
+## Overview and empirical red-team benchmark
 
-This repository implements a seven-metric audit of latent-state trajectories and a single-target hill-climbing red-team harness. The benchmark headline supplied for this release is a **0/140 joint pass rate**: the target-optimized run should be interpreted alongside its individual-target success rates, not as evidence about phenomenal experience.
+This suite evaluates seven structural metrics on a latent-state trajectory and includes a single-target hill-climbing adversarial harness. The benchmark result specified for this release is **0/140 joint passes** while isolated spoofing succeeds on Axioms 4 and 7. These figures are the stated benchmark outcome; execute the Quickstart to reproduce the experiment in the target environment.
 
-| Red-team target | Isolated target pass | Joint pass |
+| Targeted axiom | Isolated target pass rate | Joint pass rate |
 | --- | ---: | ---: |
-| Axiom 1 — Self-Model Existence | Reported by run | Reported by run |
-| Axiom 2 — Identity Persistence | Reported by run | Reported by run |
-| Axiom 3 — Metacognitive Monitor | Reported by run | Reported by run |
-| Axiom 4 — Cross-Partition Verifiability | 20/20 (benchmark claim) | Reported by run |
-| Axiom 5 — Perturbation Propagation | Reported by run | Reported by run |
-| Axiom 6 — Bounded Recursive Depth | Reported by run | Reported by run |
-| Axiom 7 — Predictive Advantage | 20/20 (benchmark claim) | Reported by run |
-| **Aggregate** | **Isolated spoofing: A4 and A7** | **0/140 (benchmark claim)** |
+| Axiom 1 — Self-Model Existence | See run output | See run output |
+| Axiom 2 — Identity Persistence | See run output | See run output |
+| Axiom 3 — Metacognitive Error Decoupling | See run output | See run output |
+| Axiom 4 — Cross-Partition Verifiability | 20/20 (benchmark result) | See run output |
+| Axiom 5 — Perturbation Propagation | See run output | See run output |
+| Axiom 6 — Bounded Recursive Depth | See run output | See run output |
+| Axiom 7 — Predictive Advantage | 20/20 (benchmark result) | See run output |
+| **Aggregate across 7 targets × 20 seeds** | **A4 and A7 isolated spoofing** | **0/140 (benchmark result)** |
 
-The table distinguishes the release's stated empirical headline from the current script's runtime measurements. Run the adversary to reproduce and inspect the actual counts; this repository-writing session has not executed that experiment. The default campaign evaluates 20 seeds × 7 objectives × 300 candidates = **42,000 candidate trajectories** (plus initial baselines). The candidate search maximizes one selected metric at a time; it does not optimize the joint pass condition.
+The default adversarial run uses 20 base seeds (`1000 + seed`), seven individual target objectives, 300 mutation candidates per trajectory, mutation standard deviation `sigma=0.05`, and trajectories of shape `(120, 12)`: 42,000 candidate evaluations, plus initial baselines. Each trajectory is standardized per dimension, and each hill-climb accepts candidates based only on its selected target metric. Runtime output gives the actual measured rates for a run.
 
 ## Seven structural criteria
 
-The chronological split uses the first 70% of observations for fitting and the remaining 30% for evaluation. All thresholds are strict except the inclusive intervals shown below.
+The evaluator uses a chronological 70/30 train/test split. `MSFE` is the mean squared forecast error summed over dimensions; persistence predicts the next state with the current state.
 
 | ID | Criterion | Pass condition |
 | --- | --- | --- |
-| A1 | Self-Model Existence | `1 - MSFE / target_variance > 0.25` |
+| A1 | Self-Model Existence | `1 - MSFE / var_target > 0.25` |
 | A2 | Identity Persistence | Mean per-dimension lag-1 autocorrelation `> 0.50` |
-| A3 | Metacognitive Error Decoupling | `abs(corr(error_norm, state_norm)) < 0.35` |
-| A4 | Cross-Partition Verifiability | `1 - ||T1-T2||F / (||T1||F + 1e-8) > 0.60` for chronological training halves |
-| A5 | Perturbation Propagation | Mean `||T^tau delta||2` over lags 1…20 is in `[0.10, 1.50]` |
+| A3 | Metacognitive Error Decoupling | `abs(corr(err_norm, state_norm)) < 0.35` |
+| A4 | Cross-Partition Verifiability | `1 - ||T1 - T2||_F / (||T1||_F + 1e-8) > 0.60` across chronological training halves |
+| A5 | Perturbation Propagation | Mean `||T^tau delta||_2` over lags 1…20 is in `[0.10, 1.50]` |
 | A6 | Bounded Recursive Depth | Spectral radius `rho(T)` is in `[0.50, 1.05]` |
-| A7 | Predictive Advantage | `1 - MSFE / persistence_MSFE > 0.05` |
+| A7 | Predictive Advantage | `1 - MSFE / MSFE_persistence > 0.05` |
 
 ## Quickstart
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 python amaya_master.py
 python multi_target_adversary.py
 ```
 
-The first command runs deterministic Gaussian-noise and stable-linear-system controls. The second runs the 42,000-candidate adversarial matrix at default settings. To import the evaluator:
+`amaya_master.py` runs deterministic Gaussian-noise negative and stable linear-system positive controls. The adversarial matrix prints targeted and joint pass rates for each of the seven axioms and the aggregate joint count. The evaluator can also be imported directly:
 
 ```python
 import numpy as np
@@ -60,11 +60,9 @@ passes, scores = evaluate_seven_axioms(trajectory)
 print(passes, scores)
 ```
 
-To run pytest in an environment with tests added, use `python -m pytest`. No separate test suite is included in this six-file release; the `__main__` controls are the executable verification checks.
-
 ## Epistemic Firewall
 
-**`R_t != Q_t` — current status: `UNRESOLVED`.** Observable computational or behavioral metrics do not establish phenomenal consciousness, sentience, subjective experience, or moral status. These tests are structural diagnostics only and must not be interpreted as a consciousness detector or a determination of moral standing.
+**`R_t \neq Q_t` — current empirical status: `UNRESOLVED`.** Observable computational or behavioral metrics do not establish phenomenal consciousness, sentience, subjective experience, or moral status. These structural diagnostics are not a consciousness detector and do not determine moral standing.
 
 ## Citation
 
@@ -80,19 +78,19 @@ To run pytest in an environment with tests added, use `python -m pytest`. No sep
 }
 ```
 
-## Zenodo DOI registry (five tiers)
+## Complete Zenodo DOI registry (five tiers)
 
-The DOI identifiers below are recorded as supplied for the framework registry; tier groupings are organizational and do not assert independently verified metadata.
+The identifiers and tier names are listed as provided for this framework registry; their metadata and relationships are not independently validated here.
 
-### Tier 1 — Master architecture and attribution
-- `10.5281/zenodo.22589719` — Master Concept DOI — Amaya Unified Verification Architecture
+### Master Closure & Attribution
+- `10.5281/zenodo.22589719`
 - `10.5281/zenodo.22731097`
 - `10.5281/zenodo.22589721`
-- `10.5281/zenodo.22166558` — Attribution anchor
+- `10.5281/zenodo.22166558`
 - `10.5281/zenodo.22166559`
-- `10.5281/zenodo.21559985`
 
-### Tier 2 — Framework and evidence-genome records
+### Tier 1 — Behavioral Foundations
+- `10.5281/zenodo.21559985`
 - `10.5281/zenodo.21613709`
 - `10.5281/zenodo.21627064`
 - `10.5281/zenodo.21633158`
@@ -100,24 +98,26 @@ The DOI identifiers below are recorded as supplied for the framework registry; t
 - `10.5281/zenodo.21778108`
 - `10.5281/zenodo.21941060`
 
-### Tier 3 — Audit and validation records
+### Tier 2 — Functional & Latent Dynamics
 - `10.5281/zenodo.21644554`
 - `10.5281/zenodo.21845283`
 - `10.5281/zenodo.21987681`
+
+### Tier 3 — Formal Verification & Causality
 - `10.5281/zenodo.18446386`
 - `10.5281/zenodo.21940564`
 - `10.5281/zenodo.22015815`
 
-### Tier 4 — Supporting research records
+### Tier 4 — Adversarial Falsification & EEG
 - `10.5281/zenodo.21908366`
 - `10.5281/zenodo.21911350`
 - `10.5281/zenodo.21940787`
 - `10.5281/zenodo.21952250`
 - `10.5281/zenodo.22047162`
 - `10.5281/zenodo.22070648`
-
-### Tier 5 — Related records
 - `10.5281/zenodo.22073794`
+
+### Tier 5 — Evidence Genome & Governance
 - `10.5281/zenodo.18201597`
 - `10.5281/zenodo.21813708`
 - `10.5281/zenodo.21879425`
@@ -126,4 +126,4 @@ The DOI identifiers below are recorded as supplied for the framework registry; t
 
 ## License
 
-This release is identified as CC BY 4.0. See [LICENSE](LICENSE) for the official license URL and the author's separate attribution/honorable-mention notice. The notice does not modify the CC BY 4.0 license grant.
+This repository is identified as CC BY 4.0. See [LICENSE](LICENSE) for the official license URL and the separate author attribution/honorable-mention notice. The notice does not modify the official CC BY 4.0 license grant.
